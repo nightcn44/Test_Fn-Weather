@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import "../globals.css";
+import { useState, useEffect } from "react";
 import Profile from "../components/Profile";
 import axios from "../utils/api";
 
@@ -9,7 +9,14 @@ export default function ProfilePage() {
   const [city, setCity] = useState("");
   const [error, setError] = useState("");
   const [weather, setWeather] = useState(null);
-  const token = localStorage.getItem("token");
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedToken = localStorage.getItem("token");
+      if (storedToken) setToken(storedToken);
+    }
+  }, []);
 
   const handleSearch = async () => {
     if (!city.trim()) {
@@ -39,7 +46,7 @@ export default function ProfilePage() {
 
   return (
     <div>
-      <Profile></Profile>
+      <Profile />
       <div className="bg">
         <div className="min-h-screen flex items-center justify-center">
           <div className="bg-white/10 p-8 rounded shadow-md w-full max-w-md">
@@ -63,36 +70,35 @@ export default function ProfilePage() {
                 </button>
               </div>
 
-              <div className="text-white mt-4 p-4 bg-white/10 rounded-md">
-                <h2 className="text-xl font-semibold mb-2">{name}</h2>
+              {weather && (
+                <div className="text-white mt-4 p-4 bg-white/10 rounded-md">
+                  <h2 className="text-xl font-semibold mb-2">{weather.name}</h2>
+                  {weather.main?.temp && (
+                    <p className="text-lg">
+                      Temperature: {Math.round(weather.main.temp)}°C
+                    </p>
+                  )}
+                  {weather.weather?.[0]?.description && (
+                    <p className="capitalize">
+                      Description: {weather.weather[0].description}
+                    </p>
+                  )}
+                  {weather.coord && (
+                    <p className="text-sm mt-2">
+                      Location: {weather.coord.lat}, {weather.coord.lon}
+                    </p>
+                  )}
+                  {weather.weather?.[0]?.icon && (
+                    <img
+                      src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
+                      alt="Weather Icon"
+                      className="w-20 h-20 mt-2"
+                    />
+                  )}
+                </div>
+              )}
 
-                <p className="text-lg">Temperature: {temperature}°C</p>
-                <p className="text-lg">
-                  Feels Like: {Math.round(main?.feels_like)}°C
-                </p>
-                <p className="text-lg">
-                  Min Temp: {Math.round(main?.temp_min)}°C
-                </p>
-
-                {description && (
-                  <p className="capitalize">Description: {description}</p>
-                )}
-                {iconCode && (
-                  <img
-                    src={iconUrl}
-                    alt="Weather Icon"
-                    className="w-20 h-20 mt-2"
-                  />
-                )}
-
-                {weather?.coord && (
-                  <p className="text-sm mt-2">
-                    Location: {weather.coord.lat}, {weather.coord.lon}
-                  </p>
-                )}
-              </div>
-
-              {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+              {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
             </div>
           </div>
         </div>
