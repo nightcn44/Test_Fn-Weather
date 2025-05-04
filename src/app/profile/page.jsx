@@ -1,4 +1,3 @@
-// pages/profile.js
 "use client";
 
 import Profile from "../components/Profile";
@@ -18,6 +17,9 @@ export default function ProfilePage() {
       <Profile />
       <div className="min-h-screen flex items-center justify-center">
         <div className="bg-white/10 p-8 rounded shadow-md w-full max-w-md">
+          <h1 className="text-2xl font-bold mb-6 text-center text-white">
+            Weather
+          </h1>
           <div className="text-center text-white py-3">
             <WeatherSearch onWeatherUpdate={handleWeatherUpdate} />
             <WeatherDisplay weather={weatherData} />

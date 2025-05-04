@@ -14,7 +14,7 @@ export default function WeatherSearch({ onWeatherUpdate }) {
       return;
     }
     try {
-      const response = await api.get(`/weather/city?city=${city}`);
+      const response = await api.get(`/weather/city?city=${city}`); // เปลี่ยน endpoint ให้ตรงกับ backend ของคุณ
       onWeatherUpdate(response.data);
       setCity("");
     } catch (err) {
