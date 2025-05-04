@@ -1,5 +1,3 @@
-"use client";
-
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -19,19 +17,19 @@ export default function Profile() {
   };
 
   return (
-    <nav className="bg-gray-800 text-white py-4">
+    <nav className="bg-gray-500 text-black py-4">
       <div className="container mx-auto">
         <div className="flex justify-between items-center">
           <Link
             href="/profile"
-            className="text-xl font-bold hover:text-yellow-300"
+            className="text-xl font-bold hover:text-blue-400"
           >
             Profile
           </Link>
           <ul className="flex gap-4">
             <li>
               {isLoggedIn ? (
-                <button onClick={handleLogout} className="hover:text-red-400">
+                <button onClick={handleLogout} className="hover:text-red-500">
                   Logout
                 </button>
               ) : (
