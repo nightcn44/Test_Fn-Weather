@@ -1,8 +1,10 @@
+"use client";
+
 import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <nav className="bg-green-700 text-white py-4">
+    <nav className="bg-gray-800 text-white py-4">
       <div className="container mx-auto">
         <div className="flex justify-between items-center">
           <Link href="/" className="text-xl font-bold hover:text-yellow-300">

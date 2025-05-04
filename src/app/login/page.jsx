@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Navbar from "../components/Navbar";
 import Link from "next/link";
 import axios from "../utils/api";
 
-export default function RegisterPage() {
+export default function LoginPage() {
+  const router = useRouter();
   const [form, setForm] = useState({ username: "", password: "" });
-  const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -18,7 +19,6 @@ export default function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setMessage("");
     setLoading(true);
 
     if (!form.username || !form.password) {
@@ -28,13 +28,17 @@ export default function RegisterPage() {
     }
 
     try {
-      const res = await axios.post("/register", form);
+      const res = await axios.post("/login", form);
+      const data = res.data;
 
-      setMessage("✅ Register success! You can now login.");
+      if (typeof window !== "undefined") {
+        localStorage.setItem("token", data.token);
+      }
+
       setLoading(false);
-      setForm({ username: "", password: "" });
+      router.push("/profile");
     } catch (error) {
-      setError(`❌ ${error.response?.data?.message || error.message}`);
+      setError(error.response?.data?.message || error.message);
       setLoading(false);
     }
   };
@@ -45,7 +49,7 @@ export default function RegisterPage() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="bg-white/10 p-8 rounded shadow-md w-full max-w-md">
           <h1 className="text-3xl font-bold mb-6 text-center text-white">
-            Register
+            Login
           </h1>
           <form onSubmit={handleSubmit} className="space-y-4">
             <label className="flex items-center border-b border-white/70 text-white py-2">
@@ -79,23 +83,18 @@ export default function RegisterPage() {
                   : "bg-blue-600 hover:bg-blue-700"
               }`}
             >
-              {loading ? "Registering..." : "Register"}
+              {loading ? "Loading..." : "Login"}
             </button>
             {error && (
               <p className="mt-2 text-sm text-red-500 text-center">{error}</p>
             )}
-            {message && (
-              <p className="mt-2 text-sm text-green-500 text-center">
-                {message}
-              </p>
-            )}
           </form>
           <hr className="my-4" />
           <p className="text-center text-white">
-            already have an account?{" "}
-            <Link className="text-blue-400 hover:underline" href="/login">
-              Login
-            </Link>{" "}
+            Don't have an account?{" "}
+            <Link className="text-blue-400 hover:underline" href="/register">
+              Register
+            </Link>
           </p>
         </div>
       </div>
